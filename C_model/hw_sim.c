@@ -20,7 +20,7 @@ typedef struct book_entry{
     int price;
     int order_id;
     int quantity;
-};
+} BookEntry;
 
 typedef struct hw_output{
     int best_price_0;
@@ -31,7 +31,7 @@ typedef struct hw_output{
     int size_of_stock_1;
     int size_of_stock_2;
     int size_of_stock_3;
-};
+} HwOutput;
 
 int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, int order_id, int prev_best){
     if (size_pointer < MAX_SIZE) {
@@ -61,7 +61,7 @@ int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, i
         }
  }
 
-  int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, int order_id, int prev_best){
+  int add_order2(struct book_entry order_to_add, int stock_id, int size_pointer, int order_id, int prev_best){
     if (size_pointer < MAX_SIZE) {
         mem2 [0][size_pointer] = order_to_add.order_id;
         mem2 [1][size_pointer] = order_to_add.price;
@@ -75,19 +75,19 @@ int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, i
         }
  }
 
-  int add_order1(struct book_entry order_to_add, int stock_id, int size_pointer, int prev_best){
+int add_order3(struct book_entry order_to_add, int stock_id, int size_pointer, int order_id, int prev_best){
     if (size_pointer < MAX_SIZE) {
-        mem3 [0][size_pointer] = order_to_add.order_id;
-        mem3 [1][size_pointer] = order_to_add.price;
-        mem3 [2][size_pointer] = order_to_add.quantity;
-        }
+        mem3[0][size_pointer] = order_to_add.order_id;
+        mem3[1][size_pointer] = order_to_add.price;
+        mem3[2][size_pointer] = order_to_add.quantity;
+    }
     if (prev_best < order_to_add.price){
-            return 1;
-        }
-    else {
-            return 0;
-        }
- }
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 
  int decrease_order0(int order_id, int dec_quantity, int prev_best, int delete_flag, int size_pointer){
 
@@ -202,12 +202,37 @@ int hw_sim(struct book_entry order_to_add, int stock_id, int quantity, int reque
 
     switch (request){
         case 0: //add_order
-            
+            if (stock_id == 0){
+                return add_order0(order_to_add, stock_id, prev_price.size_of_stock_0, order_id, prev_price.best_price_0);
+            }
+            else if (stock_id == 1){
+                return add_order1(order_to_add, stock_id, prev_price.size_of_stock_1, order_id, prev_price.best_price_1);
+            }
+            else if (stock_id == 2){
+                return add_order2(order_to_add, stock_id, prev_price.size_of_stock_2, order_id, prev_price.best_price_2);
+            }
+            else if (stock_id == 3){
+                return add_order3(order_to_add, stock_id, prev_price.size_of_stock_3, order_id, prev_price.best_price_3);
+            }
         case 1: //cancel_order
-    }
-
-
-
+            if (stock_id == 0){
+                return decrease_order0(order_id, quantity, prev_price.best_price_0, 0, prev_price.size_of_stock_0);
+            }
+            else if (stock_id == 1){
+                return decrease_order1(order_id, quantity, prev_price.best_price_1, 0, prev_price.size_of_stock_1);
+            }
+            else if (stock_id == 2){
+                return decrease_order2(order_id, quantity, prev_price.best_price_2, 0, prev_price.size_of_stock_2);
+            }
+            else if (stock_id == 3){
+                return decrease_order3(order_id, quantity, prev_price.best_price_3, 0, prev_price.size_of_stock_3);
+            }
+    }       
  }
 
-
+int main() {
+    struct book_entry order = {1, 1, 1};
+    struct hw_output prev_price = {0}; // Assuming initial values are zero
+    hw_sim(order, 1, 1, 0, 1, prev_price); // Example call
+    return 0;
+}
