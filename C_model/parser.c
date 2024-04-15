@@ -49,9 +49,15 @@ void parse_stock_directory_message(const char* buffer, Stock_Directory_Message* 
 	offset += 8;
 }
 
-int main()
+int main(int argc, char *agv[])
 {
-	printf("Hello, world!");
+	Stock_Directory_Message message;
+
+	parse_stock_directort_message(buffer, &message);
+
+	printf("Stock ID: %u\n": message.stock_id);
+	printf("Quantity; %d\n": message.qty);
+
 	return 0;
 }
 
