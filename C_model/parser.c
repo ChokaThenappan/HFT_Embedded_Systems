@@ -11,7 +11,7 @@ typedef struct
 	int req_type[3] = {0,1,2};
 	int qty;
 	uint32_t order_id;
-	char Stock[8];
+	char Stock[9];
 } Stock_Directory_Message;
 
 void parse_stock_directory_message(const char* buffer, Stock_Directory_Message* message) 
@@ -27,23 +27,26 @@ void parse_stock_directory_message(const char* buffer, Stock_Directory_Message* 
 	message->stock_id = ntohl(*(uint32_t*)(buffer+offset));
 	offset += sizeof(uint32_t);
 
-	message->timestamp;
+	message->timestamp = ntohll(*(uint64_t*)(buffer+offset));
 	offset += sizeof(uint64_t);
 
-	message->req_type;
-	// offset
+	for (int i=0; i<3; i++)
+	{
+		message->req_type[i] = ntohl(*(int*)(buffer+offset));
+		offset += sizeof(int);
+	}
 
-	message->qty;
-	// offset
+	message->qty = ntohl(*(int*)(buffer+offset));
+	offset += sizeof(int);
 	
-	message->order_id;
-	// offset
+	message->order_id = ntohl(*(uint32_t)(buffer+offset));
+	offset += sizeof(uint32_t);
 	
-	message->Stock;
-	// offset
-	
-	message->stock_id;
-	// offset
+	for (int i = 0; i < 8; i++) {
+        	message->Stock[i] = buffer[offset+i];
+    	}
+
+	offset += 8;
 }
 
 int main()
