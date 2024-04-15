@@ -1,20 +1,6 @@
-// This is the exchange file which takes the Stream nasdaq
 #include <stdio.h>
+
 #define MAX_SIZE 5
-
-
-//  Price || Order_id || Quantity
-int mem0 [3][5];
-int mem1 [3][5];
-int mem2 [3][5];
-int mem3 [3][5];
-
-//int *mem_0 = malloc(5*sizeof (struct book_entry));
-
-
-//request : ADD | CANCEL | Execute
-//            0       1       2
-
 
 typedef struct book_entry{
     int price;
@@ -35,9 +21,9 @@ typedef struct hw_output{
 
 int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, int order_id, int prev_best){
     if (size_pointer < MAX_SIZE) {
-        mem0 [0][size_pointer] = order_to_add.order_id;
-        mem0 [1][size_pointer] = order_to_add.price;
-        mem0 [2][size_pointer] = order_to_add.quantity;
+        mem_0 [0][size_pointer] = order_to_add.order_id;
+        mem_0 [1][size_pointer] = order_to_add.price;
+        mem_0 [2][size_pointer] = order_to_add.quantity;
         }
     if (prev_best < order_to_add.price){
             return 1;
@@ -49,9 +35,9 @@ int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, i
 
  int add_order1(struct book_entry order_to_add, int stock_id, int size_pointer, int order_id, int prev_best){
     if (size_pointer < MAX_SIZE) {
-        mem1 [0][size_pointer] = order_to_add.order_id;
-        mem1 [1][size_pointer] = order_to_add.price;
-        mem1 [2][size_pointer] = order_to_add.quantity;
+        mem_1 [0][size_pointer] = order_to_add.order_id;
+        mem_1 [1][size_pointer] = order_to_add.price;
+        mem_1 [2][size_pointer] = order_to_add.quantity;
         }
     if (prev_best < order_to_add.price){
             return 1;
@@ -63,9 +49,9 @@ int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, i
 
   int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, int order_id, int prev_best){
     if (size_pointer < MAX_SIZE) {
-        mem2 [0][size_pointer] = order_to_add.order_id;
-        mem2 [1][size_pointer] = order_to_add.price;
-        mem2 [2][size_pointer] = order_to_add.quantity;
+        mem_2 [0][size_pointer] = order_to_add.order_id;
+        mem_2 [1][size_pointer] = order_to_add.price;
+        mem_2 [2][size_pointer] = order_to_add.quantity;
         }
     if (prev_best < order_to_add.price){
             return 1;
@@ -77,9 +63,9 @@ int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, i
 
   int add_order1(struct book_entry order_to_add, int stock_id, int size_pointer, int prev_best){
     if (size_pointer < MAX_SIZE) {
-        mem3 [0][size_pointer] = order_to_add.order_id;
-        mem3 [1][size_pointer] = order_to_add.price;
-        mem3 [2][size_pointer] = order_to_add.quantity;
+        mem_3 [0][size_pointer] = order_to_add.order_id;
+        mem_3 [1][size_pointer] = order_to_add.price;
+        mem_3 [2][size_pointer] = order_to_add.quantity;
         }
     if (prev_best < order_to_add.price){
             return 1;
@@ -196,18 +182,3 @@ int add_order0(struct book_entry order_to_add, int stock_id, int size_pointer, i
     }
 
  }
-
-
-int hw_sim(struct book_entry order_to_add, int stock_id, int quantity, int request, int order_id, struct hw_output prev_price){
-
-    switch (request){
-        case 0: //add_order
-            
-        case 1: //cancel_order
-    }
-
-
-
- }
-
-
