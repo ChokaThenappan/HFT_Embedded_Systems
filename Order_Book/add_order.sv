@@ -1,3 +1,5 @@
+`include typedef1.sv
+
 module add_order(
     input clk, 
     input book_entry order, 
@@ -19,17 +21,16 @@ module add_order(
     output logic  [15:0] add_best_price );
 
     logic state = 0;
-
+ 	logic size_update = 0;
     always_ff@(posedge clk) begin
         case(state)
-        1b'0: begin
+        1'b0: begin
             ready <= 0;
             if (start) begin
-                if(size < 100) begin
                     addr <= size;
                     is_write <= 1;
                     size_update <= size + 1;
-                    state <= 1b'0;
+                    state <= 1'b0;
                     data_w <= order;
                     mem_start <= 1;
                     price_update <= order.price;
@@ -40,17 +41,17 @@ module add_order(
                     else begin
                         add_best_price <= best_price;
                     end
-                end
             end
         end
 
-        1b'1: begin
+        1'b1: begin
             mem_start <= 0;
             if(valid) begin
                 ready <= 1;
-                state <= 1b'0;
+                state <= 1'b0;
             end
         end
         endcase
     end
 endmodule
+
