@@ -102,6 +102,7 @@ void draw_table()
 	fbputs("614",8, 34);
 	fbputs("550",8,42);
 	fbputs("4",8,50);
+	fbputs("↓",8, 55);
 
 	// var 2
         fbputs("ARM",12 ,2);
@@ -109,6 +110,7 @@ void draw_table()
         fbputs("354",12, 34);
         fbputs("440",12,42);
         fbputs("2",12,50);
+	fbputs("↑",12,55);
 
 	// var 3
         fbputs("Oracle",16 ,2);
@@ -116,6 +118,8 @@ void draw_table()
         fbputs("525",16, 34);
         fbputs("565",16,42);
         fbputs("8",16,50);
+	fbputs("↑",16,55);
+
 
 	// var 4
         fbputs("Meta",20 ,2);
@@ -123,6 +127,7 @@ void draw_table()
         fbputs("725",20, 34);
         fbputs("695",20,42);
         fbputs("10",20,50);
+	fbputs("↓",20,55);
          
 
 }
