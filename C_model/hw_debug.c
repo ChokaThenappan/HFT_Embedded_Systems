@@ -57,28 +57,25 @@ void add_order0(struct book_entry order_to_add, int stock_id){
 
  int decrease_order0(int order_id, int dec_quantity, int delete_flag){
 
-    int temp_delete = delete_flag;
-    for (int i = 0; i < current_state.size_pointer0 ; i++ ){
+    //printf("%d", current_state.size_pointer0)
+    for (int i = 0; i < MAX_SIZE ; i++ ){
+        //printf("%d\n", mem0[0][i]);
         if (mem0[0][i] == order_id){
-            temp_delete = delete_flag;
             if (!delete_flag){
-                if (mem0[2][i] < dec_quantity){
-                    temp_delete = 1;
-                }
                 mem0[2][i] = mem0[2][i] - dec_quantity;
-                if (!temp_delete){break;}
             }
-            if(temp_delete){
-                for (int j = i; i < current_state.size_pointer0; j++ ){
-                    mem0[0][i] = mem0[0][i+1];
-                    mem0[1][i] = mem0[1][i+1];
-                    mem0[2][i] = mem0[2][i+1];
+            if(delete_flag){
+                for (int j = i; j < MAX_SIZE - 1; j++ ){
+                    mem0[0][j] = mem0[0][j+1];
+                    mem0[1][j] = mem0[1][j+1];
+                    mem0[2][j] = mem0[2][j+1];
                 }
+
                 current_state.size_pointer0--;
-                break;
             }
         }
     }
+    return 0;
  }
 
 int hw_sim(struct book_entry order_to_add, int stock_id, int quantity, int request){
@@ -90,7 +87,12 @@ int hw_sim(struct book_entry order_to_add, int stock_id, int quantity, int reque
                 
             }
             break;
-        case 1: //cancel_order
+        case 1: //delete_order
+            if (stock_id == 0){
+                decrease_order0(order_to_add.order_id, quantity, 1);
+            }
+            break;
+        case 3: //update_order
             if (stock_id == 0){
                 decrease_order0(order_to_add.order_id, quantity, 0);
             }
@@ -107,18 +109,19 @@ int main() {
     //(struct book_entry order_to_add, int stock_id, int quantity, int request)
     a = hw_sim(order, 0, 1, 0); // Example call
     order.order_id = 2;
-   a = hw_sim(order, 0, 1, 0); // Example call
+    a = hw_sim(order, 0, 1, 0); // Example call
     order.order_id = 3; 
-     a = hw_sim(order, 0, 1, 0); // Example call
+    a = hw_sim(order, 0, 1, 0); // Example call
     order.order_id = 4;
     order.price = 8;
     a = hw_sim(order, 0, 1, 0); // Example call
-    order.order_id = 5;
+    order.order_id = 3;
     order.price = 9;
-    a = hw_sim(order, 0, 1, 0); // Example call
-    order.order_id = 6;
+    a = hw_sim(order, 0, 1, 1); // Example call
+    order.order_id = 1;
     order.price = 9;
-    a = hw_sim(order, 0, 1, 0); // Example call
+    a = hw_sim(order, 0, 1, 1); // Example call
+
     printf(" Stock 0: Order ID | Price | Quantity \n");
 
     for (int i =0 ; i < 5 ; i++ ){
