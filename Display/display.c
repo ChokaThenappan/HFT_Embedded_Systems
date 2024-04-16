@@ -95,6 +95,36 @@ void draw_table()
 	fbputs("Bid", 5 , 42 );
 	fbputs("Quantity", 4, 50);
 
+	// Variables to be changed later
+	// var 1
+	fbputs("Apple",8 ,2);
+	fbputs("213123",8,18);
+	fbputs("614",8, 34);
+	fbputs("550",8,42);
+	fbputs("4",8,50);
+
+	// var 2
+        fbputs("ARM",12 ,2);
+        fbputs("64564",12,18);
+        fbputs("354",12, 34);
+        fbputs("440",12,42);
+        fbputs("2",12,50);
+
+	// var 3
+        fbputs("Oracle",16 ,2);
+        fbputs("236563",16,18);
+        fbputs("525",16, 34);
+        fbputs("565",16,42);
+        fbputs("8",16,50);
+
+	// var 4
+        fbputs("Meta",20 ,2);
+        fbputs("89045",20,18);
+        fbputs("725",20, 34);
+        fbputs("695",20,42);
+        fbputs("10",20,50);
+         
+
 }
 
 
