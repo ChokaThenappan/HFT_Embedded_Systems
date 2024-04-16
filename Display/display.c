@@ -1,8 +1,4 @@
-/*
- *
- * CSEE 4840 Lab 2 for 2019
 
- */
 #include "fbputchar.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,12 +33,8 @@ int main()
   }
 
   /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0 ; col < 64 ; col++) {
-    fbputchar('*', 0, col);
-    fbputchar('*', 23, col);
-  }
-
-  fbputs("HFT Book Builder", 30, 10);
+  clear_table();
+  fbputs("HFT Book Builder", 1 , 20);
   draw_table(); 		
 	
   return 0;
@@ -54,7 +46,7 @@ void clear_table()
 {
 /* Draw rows of asterisks across the top and bottom of the screen */
   for (int col = 0 ; col < 64 ; col++) {
-	  for(int row = 5; row < 23; row++){
+	  for(int row = 0; row < 24; row++){
 		  fbputchar(' ', row, col);
 	  }
   }
@@ -63,14 +55,16 @@ void clear_table()
 void draw_table()
 {
 	for(int col = 0 ; col < 64 ; col++){
+	fbputchar('-', 2 , col);
 	fbputchar('-', 6 , col);
 	fbputchar('-', 10 , col);
 	fbputchar('-', 14 , col);
 	fbputchar('-', 18 , col);
-	fbputchar('-', 22 , col);		
+	fbputchar('-', 22 , col);
+		
 	}
-	for(int row = 7	; row < 22 ; row++){
-		if (row == 10 || row == 14 || row == 18){
+	for(int row = 3	; row < 22 ; row++){
+		if (row == 6 || row == 10 || row == 14 || row ==18){
 			continue;	
 		}
 		else {
@@ -83,23 +77,23 @@ void draw_table()
 	}
 
 	for( int col = 33 ; col < 48 ; col++){
-		fbputchar('-', 8 , col);
+		fbputchar('-', 4 , col);
 	}
 
-	for( int row = 9 ; row	< 22 ;row ++){
-		if (row == 10 || row  == 14 || row == 18){
+	for( int row = 5 ; row	< 22 ;row ++){
+		if (row == 6 || row  == 10 || row == 14 || row == 18){
 			continue;
 		}
 		else {
 			fbputchar('|' , row , 40);
 		}
 	}
-	fbputs("Name", 8, 2);
-	fbputs("Stock ID", 8 ,18 );
-	fbputs("Price", 7 , 34);
-	fbputs("Ask", 9 , 34 );
-	fbputs("Bid", 9 , 42 );
-	fbputs("Quantity", 8, 50);
+	fbputs("Name", 4, 2);
+	fbputs("Stock ID", 4 ,18 );
+	fbputs("Price", 3 , 34);
+	fbputs("Ask", 5 , 34 );
+	fbputs("Bid", 5 , 42 );
+	fbputs("Quantity", 4, 50);
 
 }
 

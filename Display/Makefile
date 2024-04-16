@@ -14,4 +14,4 @@ fbputchar.o : fbputchar.c fbputchar.h
 
 .PHONY : clean
 clean :
-	rm -rf *.o lab2
+	rm -rf *.o display
