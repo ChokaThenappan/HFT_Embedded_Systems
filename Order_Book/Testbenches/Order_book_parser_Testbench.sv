@@ -8,10 +8,15 @@ module testbench();
 	reg resetn;
 	reg buffer_not_empty;
 	reg [319:0] ff_buffer;
-    wire [161:0] out_object;
+	wire [7:0] req_type;
+	wire [31:0] order_id;
+	wire [31:0] stock_id;
+	wire [31:0] quantity;
+	wire [63:0] price;
+	wire [7:0] side;
 	wire ready;
 
-	order_book_parser order(clk,resetn,buffer_not_empty,ff_buffer,out_object,ready);
+	order_book_parser order(clk,resetn,buffer_not_empty,ff_buffer,req_type,order_id,stock_id,quantity,price,side,ready);
 	
 	always begin
 		`HALF_CLOCK_PERIOD;
