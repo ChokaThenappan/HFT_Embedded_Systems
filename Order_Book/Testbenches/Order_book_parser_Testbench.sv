@@ -7,11 +7,11 @@ module testbench();
 	reg clk;
 	reg resetn;
 	reg buffer_not_empty;
-	reg [319:0] buffer_text;
+	reg [319:0] ff_buffer;
     wire [161:0] out_object;
 	wire ready;
 
-	order_book_parser order(clk,resetn,buffer_not_empty,buffer_text,out_object,ready);
+	order_book_parser order(clk,resetn,buffer_not_empty,ff_buffer,out_object,ready);
 	
 	always begin
 		`HALF_CLOCK_PERIOD;
@@ -25,12 +25,12 @@ module testbench();
 		clk = 0;
 		resetn = 0;
 		buffer_not_empty = 0;
-		buffer_text = 320'h447856341278563412000103EA080000060000000042000000640000000000000055060000050000;
+		ff_buffer = 320'h447856341278563412000103EA080000060000000042000000640000000000000055060000050000;
 		@(posedge clk);
 		@(posedge clk);
 		resetn = 1;
 		buffer_not_empty = 1;
-		buffer_text = 320'h447856341278563412000103EA080000060000000042000000640000000000000055060000050000;
+		ff_buffer = 320'h447856341278563412000103EA080000060000000042000000640000000000000055060000050000;
 		
 		@(posedge clk);
 		@(posedge clk);
