@@ -1,38 +1,28 @@
-`define IDLE 0
-`define READ 1
-`define WRITE 2
-
-module memory(
-input clk,
-input [11:0] address_in,
-input [31:0] data_in,
-input write_request,
-input data_read,
-output [31:0]data_out,
-output out_valid
-
+module Memory (
+	input clk,
+	input reset,
+	input wr_valid,
+	input rd_valid,
+	input [9:0] address,
+	input [128:0] data_in,
+	output reg [128:0] data_out
 );
 
+	reg [128:0] memory [1023:0];
+	reg [128:0] data_out;
+	reg ready;
 
-logic [31:0] mem [0:4096];
-logic write_busy0, out_valid0;
-logic [31:0] data_out0;
-logic in_req_type0;
-
-always@(posedge clk) begin
-	if (out_valid <= 1'b1) begin
-		if (data_read == 1'b1) out_valid <= 1'b0;
-	end
-	else begin
-		if (write_request)begin 
-			mem[address_in] <= data_in;
+	always @(posedge clk) begin
+		if (reset) begin
+			data_out <= 0;
+			ready <= 0;
 		end
-		else begin
-			data_out <= mem[address];
-			out_valid <= 1'b1;
+		else if (wr_valid) begin
+			memory[address] <= data_in;
+		end
+		else if (rd_data) begin
+			data_out <= memory[address];
 		end
 	end
-	
-end
 
 endmodule
