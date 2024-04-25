@@ -1,27 +1,44 @@
-`define ADD 3'b001
-`define DECREASE 3'b010 
-`define DELETE 3'b100
+`define STOCK1 8'h10
+`define STOCK2 8'h20
+`define STOCK3 8'h30 
+`define STOCK3 8'h40 
 
-`define STOCK1 100
-`define STOCK2 200 
-`define STOCK3 300 
-`define STOCK3 400  
+`define REQ_TYPE_ADD 8'h53
+`define REQ_TYPE_DELETE 8'h44
+`define REQ_TYPE_DECREASE 8'h45
+
+`define ADD1 12'b100000000000
+`define DELETE1 12'b010000000000
+`define DECREASE1 12'b001000000000
+`define ADD2 12'b000100000000
+`define DELETE2 12'b000010000000
+`define DECREASE2 12'b000001000000
+`define ADD3 12'b000000100000
+`define DELETE3 12'b000000010000
+`define DECREASE3 12'b000000001000
+`define ADD4 12'b000000000100
+`define DELETE4 12'b000000000010
+`define DECREASE4 12'b000000000001
+
+`define IDLE 2'b00
+`define SEND_COMMAND 2'b01
+`define WAIT_FOR_RESPONSE 2'b10
 
 typedef struct{
 	reg [31:0] order_id;
 	reg [31:0] quantity;
 	reg [63:0] price;
-	reg [2:0] order_type;
-}command_out;
+	reg [11:0] stock_activate;
+} command_out;
 
 module order_book_parser(
 input clk,
 input resetn,
 input buffer_not_empty,
 input [319:0] ff_buffer,
+input stock_ready, 
 output reg ready,
-output command_out stock1_command,
-output reg stock1_valid
+output command_out stock_command
 );
 
 reg [7:0] req_type;
@@ -30,6 +47,10 @@ reg [31:0] stock_id;
 reg [31:0] quantity;
 reg [63:0] price;
 reg [7:0] side;
+reg [1:0] current_state;
+reg [1:0] next_state;
+command_out ns_command;
+command_out cs_command;
 
 assign req_type = ff_buffer[319:312];
 assign stock_id = ff_buffer[183:152];
@@ -37,41 +58,87 @@ assign order_id = ff_buffer[247:216];
 assign quantity = ff_buffer[143:112];
 assign price = ff_buffer[111:48];
 assign side = ff_buffer[151:144];
+assign cs_command = stock_command;
+
+always@(*) begin
+	case (current_state)
+	`IDLE: begin
+		ready <= 1'b1;
+		debounce_flag <=1'b1;
+		ns_command.order_type <= 3'b000;
+		stock_activate <= 12'd0;
+		if (buffer_not_empty == 1'b1)begin
+			next_state <= `SEND_COMMAND;
+		end
+	end
+	`SEND_COMMAND: begin
+		ready <= 1'b0;
+		ns_command.order_id <= order_id;
+		ns_command.quantity <= quantity;
+		ns_command.price <= price;
+		if (stock_id == `STOCK1)begin
+			if (req_type == `REQ_TYPE_ADD)begin
+				ns_command.stock_activate <= `ADD1;
+			end
+			else if (req_type == `REQ_TYPE_DELETE)begin
+				ns_command.stock_activate <= `DELETE1;
+			end
+			else if (req_type == `REQ_TYPE_DECREASE)begin
+				ns_command.stock_activate <= `DECREASE1;
+			end
+		end
+		if (stock_id == `STOCK2)begin
+			if (req_type == `REQ_TYPE_ADD)begin
+				ns_command.stock_activate <= `ADD2;
+			end
+			else if (req_type == `REQ_TYPE_DELETE)begin
+				ns_command.stock_activate <= `DELETE2;
+			end
+			else if (req_type == `REQ_TYPE_DECREASE)begin
+				ns_command.stock_activate <= `DECREASE2;
+			end
+		end
+		if (stock_id == `STOCK3)begin
+			if (req_type == `REQ_TYPE_ADD)begin
+				ns_command.stock_activate <= `ADD3;
+			end
+			else if (req_type == `REQ_TYPE_DELETE)begin
+				ns_command.stock_activate <= `DELETE3;
+			end
+			else if (req_type == `REQ_TYPE_DECREASE)begin
+				ns_command.stock_activate <= `DECREASE3;
+			end
+		end
+		if (stock_id == `STOCK4)begin
+			if (req_type == `REQ_TYPE_ADD)begin
+				ns_command.stock_activate <= `ADD4;
+			end
+			else if (req_type == `REQ_TYPE_DELETE)begin
+				ns_command.stock_activate <= `DELETE4;
+			end
+			else if (req_type == `REQ_TYPE_DECREASE)begin
+				ns_command.stock_activate <= `DECREASE4;
+			end
+		end
+		next_state <= `WAIT_FOR_RESPONSE;
+	end
+	`WAIT_FOR_RESPONSE: begin
+		@(posedge stock_ready) begin
+			next_state <= `IDLE;
+		end
+	end
+	endcase
+end
+
 
 always@(posedge clk)begin
-	if (!resetn)begin
-		ready <= 1'b1;
-		stock1_valid <= 1'b0;
+	if (!resetn) begin
+		current_state <= `IDLE;
 	end
-  	else if (buffer_not_empty == 1'b1 && ready == 1'b1)begin
-		ready <= 1'b0;
-		case(stock_id)
-			`STOCK1: begin
-				stock1_command.order_id <= order_id;
-				stock1_command.quantity <= quantity;
-				stock1_command.price <= price;
-				stock1_command.order_type <= (req_type == 8'h53)? `ADD : ((req_type == 8'h44)? `DELETE : ((req_type == 8'h45)?`DECREASE: 3'b000));
-			end
-			`STOCK2: begin
-				stock2_command.order_id <= order_id;
-				stock2_command.quantity <= quantity;
-				stock2_command.price <= price;
-				stock2_command.order_type <= (req_type == 8'h53)? `ADD : ((req_type == 8'h44)? `DELETE : ((req_type == 8'h45)?`DECREASE: 3'b000));
-			end
-			`STOCK3: begin
-				stock3_command.order_id <= order_id;
-				stock3_command.quantity <= quantity;
-				stock3_command.price <= price;
-				stock3_command.order_type <= (req_type == 8'h53)? `ADD : ((req_type == 8'h44)? `DELETE : ((req_type == 8'h45)?`DECREASE: 3'b000));
-			end
-			`STOCK4: begin
-				stock4_command.order_id <= order_id;
-				stock4_command.quantity <= quantity;
-				stock4_command.price <= price;
-				stock4_command.order_type <= (req_type == 8'h53)? `ADD : ((req_type == 8'h44)? `DELETE : ((req_type == 8'h45)?`DECREASE: 3'b000));
-			end
-		endcase		
+	else begin
+		current_state <= next_state;
+		cs_command <= ns_command;
 	end
-    	else ready <= 1'b1;
-end    
+end
+
 endmodule
