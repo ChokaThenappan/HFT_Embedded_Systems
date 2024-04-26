@@ -1,7 +1,7 @@
 `define STOCK1 8'h10
 `define STOCK2 8'h20
 `define STOCK3 8'h30 
-`define STOCK3 8'h40 
+`define STOCK4 8'h40 
 
 `define REQ_TYPE_ADD 8'h53
 `define REQ_TYPE_DELETE 8'h44
@@ -31,14 +31,17 @@ typedef struct{
 	reg [11:0] stock_activate;
 } command_out;
 
-module order_book_parser(
+module parser(
 input clk,
 input resetn,
 input buffer_not_empty,
 input [319:0] ff_buffer,
 input stock_ready, 
-output reg ready,
-output command_out stock_command
+output reg valid,
+output reg [31:0] out_order_id,
+output reg [31:0] out_quantity,
+output reg [63:0] out_price,
+output reg [1:0] current_state
 );
 
 reg [7:0] req_type;
@@ -47,32 +50,34 @@ reg [31:0] stock_id;
 reg [31:0] quantity;
 reg [63:0] price;
 reg [7:0] side;
-reg [1:0] current_state;
+//reg [1:0] current_state;
 reg [1:0] next_state;
 command_out ns_command;
 command_out cs_command;
+command_out stock_command;
 
+assign out_order_id = cs_command.order_id;
+assign out_quantity = cs_command.quantity;
+assign out_price = cs_command.price;
 assign req_type = ff_buffer[319:312];
 assign stock_id = ff_buffer[183:152];
 assign order_id = ff_buffer[247:216];
 assign quantity = ff_buffer[143:112];
 assign price = ff_buffer[111:48];
 assign side = ff_buffer[151:144];
-assign cs_command = stock_command;
+assign stock_command = cs_command;
 
 always@(*) begin
 	case (current_state)
 	`IDLE: begin
-		ready <= 1'b1;
-		debounce_flag <=1'b1;
-		ns_command.order_type <= 3'b000;
-		stock_activate <= 12'd0;
+		valid <= 1'b0;
+		ns_command.stock_activate <= 12'd0;
 		if (buffer_not_empty == 1'b1)begin
 			next_state <= `SEND_COMMAND;
 		end
 	end
 	`SEND_COMMAND: begin
-		ready <= 1'b0;
+		valid <= 1'b0;
 		ns_command.order_id <= order_id;
 		ns_command.quantity <= quantity;
 		ns_command.price <= price;
@@ -123,6 +128,7 @@ always@(*) begin
 		next_state <= `WAIT_FOR_RESPONSE;
 	end
 	`WAIT_FOR_RESPONSE: begin
+		valid <= 1'b1;
 		@(posedge stock_ready) begin
 			next_state <= `IDLE;
 		end
