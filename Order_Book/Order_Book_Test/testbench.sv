@@ -43,7 +43,26 @@ initial begin
 	@(posedge clk);
 	@(posedge clk);
 	@(posedge clk);
-	for(i=0; i<200; i++)begin
+	for(i=0; i<100; i++)begin
+		order_id = i;
+		req_type = 3'b100;
+		quantity = 32'h435365;
+		price = (i * 20);
+		valid = 1;
+		@(posedge ready);
+		valid = 0;
+		@(posedge clk);
+	end
+	order_id = 100;
+	req_type = 3'b100;
+	quantity = 32'h435365;
+	price = 64'h3981;
+	valid = 1;
+	@(posedge ready);
+	valid = 0;
+	@(posedge clk);
+	
+	for(i=101; i<200; i++)begin
 		order_id = i;
 		req_type = 3'b100;
 		quantity = 32'h435365;
@@ -57,6 +76,15 @@ initial begin
 	req_type = 3'b001;
 	quantity = 32'hF;
 	price = (i * 20);
+	valid = 1;
+	@(posedge ready);
+	valid = 0;
+	@(posedge clk);
+	
+	order_id = 100;
+	req_type = 3'b010;
+	quantity = 32'hFFFF;
+	price = 64'h3981;
 	valid = 1;
 	@(posedge ready);
 	valid = 0;
