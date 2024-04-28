@@ -84,7 +84,7 @@ always@(posedge clk)begin
                 temp_max_price <= memory [search_pointer][63:0];
             end
             search_pointer <= search_pointer + 1'b1;
-            if (search_pointer == 10'd1023) begin
+            if (search_pointer == pointer) begin
                 current_state <= `IDLE;
                 max_order_id <= temp_max_order_id;
                 max_price <= temp_max_price;
