@@ -1,5 +1,16 @@
 import random
 import struct
+import time
+import socket
+
+# Change teh IP address to the IP address of the FPGA (arthur.cs.columbia.edu)
+# SERVER_IP = "128.59.19.114"
+FPGA_IP = "127.0.0.1"
+FPGA_PORT = 42000
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+sock.connect((FPGA_IP, FPGA_PORT))
 
 # List to store existing orders
 existing_orders = []
@@ -56,6 +67,11 @@ def generate_message(order_book_id_int):
 
 for order_book_id_int in range(4):
     print(f"Order Book ID: {order_book_id_int}")
+    sock.sendall(generate_message(order_book_id_int))
     for _ in range(1000):
         message = generate_message(order_book_id_int)
         print(" ".join(f"{b:02X}" for b in message))
+        sock.sendall(message)
+        time.sleep(0.1)
+
+sock.close()
