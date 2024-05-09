@@ -8,6 +8,57 @@
 
 #define SERVER_PORT 42000
 #define BUFFER_SIZE 1024
+#define QUEUE_SIZE 100
+
+typedef struct {
+    char data[BUFFER_SIZE];
+} QueueData;
+
+typedef struct {
+    QueueData items[QUEUE_SIZE];
+    int front, rear;
+} Queue;
+
+void initializeQueue(Queue *q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+int isQueueEmpty(Queue *q) {
+    return (q->front == -1 && q->rear == -1);
+}
+
+int isQueueFull(Queue *q) {
+    return ((q->rear + 1) % QUEUE_SIZE == q->front);
+}
+
+void enqueue(Queue *q, QueueData item) {
+    if (isQueueFull(q)) {
+        printf("Queue is full\n");
+        return;
+    } else if (isQueueEmpty(q)) {
+        q->front = q->rear = 0;
+    } else {
+        q->rear = (q->rear + 1) % QUEUE_SIZE;
+    }
+    q->items[q->rear] = item;
+}
+
+QueueData dequeue(Queue *q) {
+    QueueData item;
+    if (isQueueEmpty(q)) {
+        printf("Queue is empty\n");
+        // You might want to handle this differently based on your application's requirements
+        exit(1);
+    } else if (q->front == q->rear) {
+        item = q->items[q->front];
+        q->front = q->rear = -1;
+    } else {
+        item = q->items[q->front];
+        q->front = (q->front + 1) % QUEUE_SIZE;
+    }
+    return item;
+}
 
 void *network_thread_f(void *);
 
@@ -15,6 +66,8 @@ int main() {
     int sockfd, newsockfd, client_len;
     struct sockaddr_in serv_addr, client_addr;
     pthread_t network_thread;
+    Queue dataQueue;
+    initializeQueue(&dataQueue);
 
     // Create a TCP socket
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -58,8 +111,10 @@ int main() {
         char data[BUFFER_SIZE];
         sprintf(data, "Data from FPGA");
 
-        // Send data to the PC
-        write(newsockfd, data, strlen(data));
+        // Enqueue data
+        QueueData newData;
+        strcpy(newData.data, data);
+        enqueue(&dataQueue, newData);
 
         // Simulated delay
         sleep(2);
@@ -86,7 +141,7 @@ void *network_thread_f(void *arg) {
             close(sockfd);
             break; // Exit the thread
         }
-       // recvBuf[n] = '\0';
+        // recvBuf[n] = '\0';
         for (int i = 0; i < n; i++) {
             printf("%02X ", (unsigned char)recvBuf[i]);
         }
