@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 
 #define SERVER_PORT 42000
+#define SERVER_HOST "128.59.19.114"
 #define BUFFER_SIZE 1024
 #define QUEUE_SIZE 100
 
