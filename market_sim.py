@@ -5,7 +5,8 @@ import socket
 
 # Change teh IP address to the IP address of the FPGA (arthur.cs.columbia.edu)
 # SERVER_IP = "128.59.19.114"
-FPGA_IP = "127.0.0.1"
+# FPGA_IP = "127.0.0.1"
+FPGA_IP = "128.59.19.114"
 FPGA_PORT = 42000
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
