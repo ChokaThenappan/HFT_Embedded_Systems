@@ -81,10 +81,7 @@ int main() {
     // Get the server address
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-<<<<<<< HEAD
-=======
     serv_addr.sin_addr.s_addr = inet_addr("128.59.19.114");
->>>>>>> d6943cd (add IP)
     serv_addr.sin_port = htons(SERVER_PORT);
     if (inet_pton(AF_INET, SERVER_HOST, &serv_addr.sin_addr) <= 0) {
         perror("Error converting host IP");
