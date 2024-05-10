@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -6,9 +5,10 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <stdio.h>
 
-#define SERVER_HOST "128.59.19.114"
-#define SERVER_PORT 42000
+#define SERVER_HOST "128.59.65.109"
+#define SERVER_PORT 42001
 #define BUFFER_SIZE 1024
 #define QUEUE_SIZE 100
 
@@ -65,36 +65,43 @@ QueueData dequeue(Queue *q) {
 void *network_thread_f(void *);
 
 int main() {
-    int sockfd;
-    struct sockaddr_in serv_addr;
+    int sockfd, newsockfd, client_len;
+    struct sockaddr_in serv_addr, client_addr;
     pthread_t network_thread;
     Queue dataQueue;
     initializeQueue(&dataQueue);
 
     // Create a TCP socket
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        perror("Error opening socket");
+    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        fprintf(stderr, "Error: Could not create socket\n");
         exit(1);
     }
 
-    // Get the server address
+    // Set up the server address struct
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = INADDR_ANY;
     serv_addr.sin_port = htons(SERVER_PORT);
-    if (inet_pton(AF_INET, SERVER_HOST, &serv_addr.sin_addr) <= 0) {
-        perror("Error converting host IP");
+
+    // Bind the socket to the server address
+    if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+        perror("Error on binding");
         exit(1);
     }
 
-    // Connect the socket to the server
-    if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-        perror("Error connecting to server");
+    // Listen for incoming connections
+    listen(sockfd, 5);
+
+    // Accept incoming connections
+    client_len = sizeof(client_addr);
+    newsockfd = accept(sockfd, (struct sockaddr *) &client_addr, &client_len);
+    if (newsockfd < 0) {
+        perror("Error on accept");
         exit(1);
     }
 
     // Start the network thread
-    if (pthread_create(&network_thread, NULL, network_thread_f, (void *) sockfd) != 0) {
+    if (pthread_create(&network_thread, NULL, network_thread_f, (void *) newsockfd) != 0) {
         perror("Error creating network thread");
         exit(1);
     }
@@ -131,7 +138,7 @@ void *network_thread_f(void *arg) {
             perror("Error reading from socket");
             exit(1);
         } else if (n == 0) {
-            printf("Connection closed by server\n");
+            printf("Connection closed by client\n");
             close(sockfd);
             break; // Exit the thread
         }
