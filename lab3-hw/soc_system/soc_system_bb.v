@@ -65,8 +65,7 @@ module soc_system (
 	hps_ddr3_mem_dqs_n,
 	hps_ddr3_mem_odt,
 	hps_ddr3_mem_dm,
-	hps_ddr3_oct_rzqin,
-	reset_reset_n);	
+	hps_ddr3_oct_rzqin);	
 
 	input		clk_clk;
 	output		hps_hps_io_emac1_inst_TX_CLK;
@@ -134,5 +133,4 @@ module soc_system (
 	output		hps_ddr3_mem_odt;
 	output	[3:0]	hps_ddr3_mem_dm;
 	input		hps_ddr3_oct_rzqin;
-	input		reset_reset_n;
 endmodule

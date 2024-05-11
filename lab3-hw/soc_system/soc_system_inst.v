@@ -64,7 +64,6 @@
 		.hps_ddr3_mem_dqs_n           (<connected-to-hps_ddr3_mem_dqs_n>),           //         .mem_dqs_n
 		.hps_ddr3_mem_odt             (<connected-to-hps_ddr3_mem_odt>),             //         .mem_odt
 		.hps_ddr3_mem_dm              (<connected-to-hps_ddr3_mem_dm>),              //         .mem_dm
-		.hps_ddr3_oct_rzqin           (<connected-to-hps_ddr3_oct_rzqin>),           //         .oct_rzqin
-		.reset_reset_n                (<connected-to-reset_reset_n>)                 //    reset.reset_n
+		.hps_ddr3_oct_rzqin           (<connected-to-hps_ddr3_oct_rzqin>)            //         .oct_rzqin
 	);
 
