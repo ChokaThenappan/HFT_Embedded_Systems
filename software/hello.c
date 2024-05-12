@@ -2,9 +2,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <stdint.h>
 #include <stdio.h>
 #include "vga_ball.h"
 #include <sys/ioctl.h>
@@ -77,6 +79,21 @@ void read_message() {
     //        vla.message.trans_id, vla.message.order_book_id, vla.message.side,
     //        vla.message.qty, vla.message.price, vla.message.yield);
 }
+
+uint64_t current_timestamp = 0;
+
+uint64_t generate_increasing_timestamp() {
+    return current_timestamp++;
+}
+
+uint32_t generate_random_32bit() {
+    return rand();
+}
+
+uint64_t generate_random_64bit() {
+    return ((uint64_t)rand() << 32) | rand();
+}
+
 void write_message(const vga_ball_color_t *c) {
     vga_ball_arg_t vla;
     vla.message = *c;
@@ -96,8 +113,27 @@ void write_message(const vga_ball_color_t *c) {
 
     }
     else {
-        printf("Waiting for buffer and port to be ready...\n");
-        sleep(1);
+        printf("Waiting for ready...\n");
+        // printf("Data written to device:\n");
+
+        srand(time(NULL));
+
+        uint8_t msg_type = rand() % 3 == 0 ? 0x53 : (rand() % 2 == 0 ? 0x44 : 0x45);
+        uint64_t timestamp = generate_increasing_timestamp();
+        uint32_t order_ref_number = generate_random_32bit();
+        uint32_t order_book_id = rand() % 4;
+        uint32_t qty = generate_random_32bit();
+        uint64_t price = generate_random_64bit();
+
+        printf("Msg Type: 0x%02x, Timestamp: 0x%016llx, Order Ref Number: 0x%08x, Order Book ID: 0x%02x, Qty: 0x%08x, Price: 0x%016llx \n",
+               msg_type, timestamp, order_ref_number, order_book_id, qty, price);
+
+        // Sleep based on the message type
+        if (msg_type == 0x44) {
+            sleep(4);
+        } else if (msg_type == 0x45) {
+            sleep(2);
+        }
     }
 }
 
