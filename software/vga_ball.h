@@ -4,7 +4,15 @@
 #include <linux/ioctl.h>
 
 typedef struct {
-	unsigned char msg_type, timestamp, order_ref_number, trans_id, order_book_id, side, qty, price, yield, buffer_not_empty, readportt;
+	unsigned char msg_type;
+    uint32_t timestamp;
+    uint32_t order_reference_number;
+    uint32_t trans_id;
+    uint32_t order_book_id;
+    unsigned char side;
+    uint32_t quantity;
+    uint64_t price;
+    uint32_t yield;
 } vga_ball_color_t;
 
 
