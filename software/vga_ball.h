@@ -12,7 +12,7 @@ typedef struct {
   unsigned char side;
   uint32_t qty;
   uint64_t price;
-  uint32_t yield
+  uint32_t yield;
   unsigned char buffer_not_empty;
   unsigned char readportt;
 } vga_ball_color_t;
