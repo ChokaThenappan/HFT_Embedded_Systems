@@ -205,8 +205,8 @@ int main() {
         memcpy(&vla, dataItem.data, sizeof(vga_ball_color_t));
 
         printf("Message Type: %02x\n", vla.msg_type);
-        printf("Timestamp: %02x\n", vla.timestamp);
-        printf("Order Reference Number: %02x\n", vla.order_ref_number);
+        printf("Timestamp: %02x\n", vla.timestamp & 0xFF);
+        printf("Order Reference Number: %02x\n", vla.order_ref_number & 0xFF);
         write_message(&vla);
     }
 
