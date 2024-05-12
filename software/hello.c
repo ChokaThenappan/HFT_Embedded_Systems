@@ -36,8 +36,8 @@ void write_message(const vga_ball_color_t *c) {
 	vga_ball_arg_t vla;
 	vla.message = *c;
 
-    unsigned char bufferNotEmpty = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
-    unsigned char readPort = ioctl(vga_ball_fd, READPORTT(0), &vla);
+    unsigned char bufferNotEmpty = ioread8(BUFFER_NOT_EMPTY(dev.virtbase));
+    unsigned char readPort = ioread8(READPORTT(dev.virtbase));
 
     if (bufferNotEmpty && readPort) {
 
