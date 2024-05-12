@@ -27,7 +27,7 @@ void read_message() {
 		perror("ioctl(VGA_BALL_READ_DATA) failed");
       		return;
   	}
-	printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x\n", vla.message.msg_type, vla.message.timestamp, vla.message.order_ref_number, 			vla.message.trans_id, vla.message.order_book_id, vla.message.side, vla.message.qty, vla.message.price, vla.message.yield);
+	// printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x\n", vla.message.msg_type, vla.message.timestamp, vla.message.order_ref_number, 			vla.message.trans_id, vla.message.order_book_id, vla.message.side, vla.message.qty, vla.message.price, vla.message.yield);
 }
 
 /* WRITE THE MESSAGE */
@@ -45,10 +45,14 @@ void write_message(const vga_ball_color_t *c) {
 		perror("ioctl(VGA_BALL_WRITE_DATA) failed");
 		return;
 	}
-    printf("Data written to device\n");
+    printf("Data written to device:\n");
+    printf("Msg Type: %02x, Timestamp: %02x, Order Ref Number: %02x, Trans ID: %02x, Order Book ID: %02x, Side: %02x, Qty: %02x, Price: %02x, Yield: %02x\n",
+               vla.message.msg_type, vla.message.timestamp, vla.message.order_ref_number,
+               vla.message.trans_id, vla.message.order_book_id, vla.message.side,
+               vla.message.qty, vla.message.price, vla.message.yield);
     }
     else {
-        printf("Waiting for buffer and port to be ready...\n");
+        // printf("Waiting for buffer and port to be ready...\n");
         sleep(1);
     }
 }
@@ -86,7 +90,7 @@ void enqueue(Queue *q, QueueData item) {
     }
 
     if (isQueueFull(q)) {
-        printf("Queue is full\n");
+        // printf("Queue is full\n");
         return;
     } else if (isQueueEmpty(q)) {
         q->front = q->rear = 0;
@@ -144,7 +148,7 @@ int main() {
 
     // Create a TCP socket
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        fprintf(stderr, "Error: Could not create socket\n");
+        // fprintf(stderr, "Error: Could not create socket\n");
         exit(1);
     }
 
@@ -181,7 +185,7 @@ int main() {
     while (1) {
         // Simulated data generation
         char data[BUFFER_SIZE];
-        sprintf(data, "Data from FPGA");
+        // sprintf(data, "Data from FPGA");
 	
         // Enqueue data
         QueueData newData;
@@ -211,18 +215,18 @@ void *network_thread_f(void *arg) {
     while (1) {
         int n = read(sockfd, recvBuf, BUFFER_SIZE);
         if (n < 0) {
-            perror("Error reading from socket");
+            // perror("Error reading from socket");
             exit(1);
         } else if (n == 0) {
-            printf("Connection closed by client\n");
+            // printf("Connection closed by client\n");
             close(sockfd);
             break; // Exit the thread
         }
         // recvBuf[n] = '\0';
-        for (int i = 0; i < n; i++) {
-            printf("%02X ", (unsigned char)recvBuf[i]);
-        }
-        printf("\n");
+        // for (int i = 0; i < n; i++) {
+        //     printf("%02X ", (unsigned char)recvBuf[i]);
+        // }
+        // printf("\n");
     }
 
     return NULL;
