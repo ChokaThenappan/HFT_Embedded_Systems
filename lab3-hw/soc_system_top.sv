@@ -193,7 +193,7 @@ module soc_system_top(
 
    soc_system soc_system0(
      .clk_clk                      ( CLOCK_50 ),
-     .reset_reset_n                ( 1'b1 ),
+     //.reset_reset_n                ( 1'b1 ),
 			  
      .hps_ddr3_mem_a               ( HPS_DDR3_ADDR ),
      .hps_ddr3_mem_ba              ( HPS_DDR3_BA ),

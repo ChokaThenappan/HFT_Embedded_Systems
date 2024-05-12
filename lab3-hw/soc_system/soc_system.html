@@ -67,7 +67,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
   </table>
   <table class="blueBar">
    <tr>
-    <td class="l">2024.05.11.01:48:13</td>
+    <td class="l">2024.05.11.15:26:54</td>
     <td class="r">Datasheet</td>
    </tr>
   </table>
@@ -847,6 +847,79 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
    <hr/>
    <h2>clk_0</h2>clock_source v21.1
    <br/>
+   <div class="greydiv">
+    <table class="connectionboxes">
+     <tr>
+      <td class="neighbor" rowspan="2">
+       <a href="#module_hps_0_bridges">hps_0_bridges</a>
+      </td>
+      <td class="from">h2f_reset&#160;&#160;</td>
+      <td class="main" rowspan="13">clk_0</td>
+     </tr>
+     <tr>
+      <td class="to">&#160;&#160;clk_in_reset</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">clk&#160;&#160;</td>
+      <td class="neighbor" rowspan="4">
+       <a href="#module_vga_ball_0">vga_ball_0</a>
+      </td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;clock</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">clk_reset&#160;&#160;</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;reset</td>
+     </tr>
+     <tr style="height:6px">
+      <td></td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">clk&#160;&#160;</td>
+      <td class="neighbor" rowspan="6">
+       <a href="#module_hps_0_bridges">hps_0_bridges</a>
+      </td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;f2h_axi_clock</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">clk&#160;&#160;</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;h2f_axi_clock</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">clk&#160;&#160;</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;h2f_lw_axi_clock</td>
+     </tr>
+    </table>
+   </div>
    <br/>
    <br/>
    <table class="flowbox">
@@ -19965,7 +20038,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        <a href="#module_hps_0_clk_0">hps_0_clk_0</a>
       </td>
       <td class="from">clk_reset&#160;&#160;</td>
-      <td class="main" rowspan="139">hps_0_bridges</td>
+      <td class="main" rowspan="142">hps_0_bridges</td>
      </tr>
      <tr>
       <td class="to">&#160;&#160;reset_sink</td>
@@ -20664,6 +20737,22 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
       <td></td>
       <td></td>
       <td class="to">&#160;&#160;avalon_slave_0</td>
+     </tr>
+     <tr style="height:6px">
+      <td></td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">h2f_reset&#160;&#160;</td>
+      <td class="neighbor" rowspan="2">
+       <a href="#module_clk_0">clk_0</a>
+      </td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;clk_in_reset</td>
      </tr>
     </table>
    </div>
@@ -28381,8 +28470,8 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
   </div>
   <table class="blueBar">
    <tr>
-    <td class="l">generation took 0.03 seconds</td>
-    <td class="r">rendering took 0.42 seconds</td>
+    <td class="l">generation took 0.01 seconds</td>
+    <td class="r">rendering took 0.17 seconds</td>
    </tr>
   </table>
  </body>

@@ -51,17 +51,10 @@ module vga_ball(
 	input logic	[7:0]	writedata,
 	input logic		write,
 	input logic 		chipselect,
-	input logic	[5:0]	address,
-	
-	output logic [7:0] VGA_R, VGA_G, VGA_B,
-	output logic 	   VGA_CLK, VGA_HS, VGA_VS,
-		                   VGA_BLANK_n,
-	output logic 	   VGA_SYNC_n
+	input logic	[5:0]	address
 );
 
-
 logic [7:0] message [63:0];
-logic [7:0] readdata;
 assign VGA_R = 8'd45;
 integer i;
 
@@ -70,10 +63,7 @@ always_ff @(posedge clk) begin
 		for (i=0; i<64; i=i+1) message[i] <= 8'd0;
 	end else if (write) begin
 		message [address] <= writedata;
-	end else begin
-		assign readdata = VGA_R;
-		readdata <= message [address];
-	end
+	end 
 end
 
 
