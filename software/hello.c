@@ -97,8 +97,18 @@ void write_message(const vga_ball_color_t *c) {
     vga_ball_arg_t vla;
     vla.message = *c;
 
-    unsigned char bufferNotEmpty = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
-    unsigned char readPort = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
+    int bufferNotEmpty, readPort;
+    if (ioctl(vga_ball_fd, VGA_BALL_READ_BUFFER, &bufferNotEmpty) < 0) {
+        perror("ioctl(VGA_BALL_READ_BUFFER) failed");
+        return;
+    }
+    if (ioctl(vga_ball_fd, VGA_BALL_READDPORTT, &readPort) < 0) {
+        perror("ioctl(VGA_BALL_READDPORTT) failed");
+        return;
+    }
+
+    // unsigned char bufferNotEmpty = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
+    // unsigned char readPort = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
 
     if (bufferNotEmpty && readPort) {
 
