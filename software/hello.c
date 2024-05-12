@@ -33,8 +33,12 @@ void read_message() {
 /* WRITE THE MESSAGE */
 
 void write_message(const vga_ball_color_t *c) {
-	vga_ball_arg_t vla;
+	QueueData dataItem = dequeue(&dataQueue);
+    
+    vga_ball_arg_t vla;
 	vla.message = *c;
+
+    memcpy(&vla, dataItem.data, sizeof(vga_ball_color_t));
 
     unsigned char bufferNotEmpty = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
     unsigned char readPort = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
@@ -52,7 +56,7 @@ void write_message(const vga_ball_color_t *c) {
                vla.message.qty, vla.message.price, vla.message.yield);
     }
     else {
-        // printf("Waiting for buffer and port to be ready...\n");
+        printf("Waiting for buffer and port to be ready...\n");
         sleep(1);
     }
 }
