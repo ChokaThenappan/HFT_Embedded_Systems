@@ -12,7 +12,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define SERVER_HOST "128.59.65.109"
+#define SERVER_HOST "128.59.64.144"
 #define SERVER_PORT 42001
 #define BUFFER_SIZE 1024
 #define QUEUE_SIZE 100

@@ -25,6 +25,8 @@
 #define QTY(x) ((x)+6)
 #define PRICE(x) ((x)+7)
 #define YIELD(x) ((x)+8)
+#define BUFFER_NOT_EMPTY(x) ((x)+9)
+#define READPORTT(x) ((x)+10)
 
 /*
  * Information about our device
@@ -50,6 +52,7 @@ static void write_data(vga_ball_color_t *message)
 	iowrite8(message->qty, QTY(dev.virtbase) );
 	iowrite8(message->price, PRICE(dev.virtbase) );
 	iowrite8(message->yield, YIELD(dev.virtbase) );
+	//iowrite8(message->b
 	dev.message = *message;
 }
 
