@@ -97,18 +97,8 @@ void write_message(const vga_ball_color_t *c) {
     vga_ball_arg_t vla;
     vla.message = *c;
 
-    int bufferNotEmpty, readPort;
-    if (ioctl(vga_ball_fd, VGA_BALL_READ_BUFFER, &bufferNotEmpty) < 0) {
-        perror("ioctl(VGA_BALL_READ_BUFFER) failed");
-        return;
-    }
-    if (ioctl(vga_ball_fd, VGA_BALL_READDPORTT, &readPort) < 0) {
-        perror("ioctl(VGA_BALL_READDPORTT) failed");
-        return;
-    }
-
-    // unsigned char bufferNotEmpty = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
-    // unsigned char readPort = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
+    unsigned char bufferNotEmpty = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
+    unsigned char readPort = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
 
     if (bufferNotEmpty && readPort) {
 
@@ -213,6 +203,10 @@ int main() {
         QueueData dataItem = dequeue(&dataQueue);
         vga_ball_color_t vla;
         memcpy(&vla, dataItem.data, sizeof(vga_ball_color_t));
+
+        printf("Message Type: %02x\n", vla.msg_type);
+        printf("Timestamp: %02x\n", vla.timestamp);
+        printf("Order Reference Number: %02x\n", vla.order_ref_number);
         write_message(&vla);
     }
 
