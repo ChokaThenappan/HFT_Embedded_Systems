@@ -36,6 +36,9 @@ void write_message(const vga_ball_color_t *c) {
 	vga_ball_arg_t vla;
 	vla.message = *c;
 
+    unsigned char bufferNotEmpty = ioctl(vga_ball_fd, VGA_BALL_READ_DATA, &vla);
+    unsigned char readPort = ioctl(vga_ball_fd, READPORTT(0), &vla);
+
     if (bufferNotEmpty && readPort) {
 
 	if (ioctl(vga_ball_fd, VGA_BALL_WRITE_DATA, &vla)) {
@@ -48,8 +51,6 @@ void write_message(const vga_ball_color_t *c) {
         printf("Waiting for buffer and port to be ready...\n");
         sleep(1);
     }
-}
-printf('Buffer is full, now write data \n');
 }
 
 typedef struct {
