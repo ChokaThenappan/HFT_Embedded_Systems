@@ -52,7 +52,7 @@ static void write_data(vga_ball_color_t *message)
 	iowrite8(message->qty, QTY(dev.virtbase) );
 	iowrite8(message->price, PRICE(dev.virtbase) );
 	iowrite8(message->yield, YIELD(dev.virtbase) );
-	//iowrite8(message->b
+	iowrite8(1, BUFFER_NOT_EMPTY(dev.virtbase));
 	dev.message = *message;
 }
 
