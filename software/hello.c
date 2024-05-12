@@ -103,6 +103,9 @@ void write_message(const vga_ball_color_t *c) {
     if (bufferNotEmpty && readPort) {
 
     if (ioctl(vga_ball_fd, VGA_BALL_WRITE_DATA, &vla)) {
+        vla.message.buffer_not_empty = 1;
+        vla.message.readportt = 1;
+        vla.message.msg_type = 0x01;
         printf("Data written to device:\n");
         printf("Msg Type: %02x, Timestamp: %02x, Order Ref Number: %02x, Trans ID: %02x, Order Book ID: %02x, Side: %02x, Qty: %02x, Price: %02x, Yield: %02x\n",
            vla.message.msg_type, vla.message.timestamp, vla.message.order_ref_number,
