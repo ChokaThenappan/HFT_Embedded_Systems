@@ -128,6 +128,10 @@ void write_message(const vga_ball_color_t *c) {
         printf("Msg Type: 0x%02x, Timestamp: 0x%016llx, Order Ref Number: 0x%08x, Order Book ID: 0x%02x, Qty: 0x%08x, Price: 0x%016llx \n",
                msg_type, timestamp, order_ref_number, order_book_id, qty, price);
 
+        printf("Done!")
+
+        printf("\n")
+
         // Sleep based on the message type
         if (msg_type == 0x44) {
             sleep(4);
