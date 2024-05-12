@@ -115,6 +115,11 @@ void write_message(const vga_ball_color_t *c) {
     }
     else {
         printf("Waiting for buffer and port to be ready...\n");
+        printf("Data written to device:\n");
+        printf("Msg Type: %02x, Timestamp: %02x, Order Ref Number: %02x, Trans ID: %02x, Order Book ID: %02x, Side: %02x, Qty: %02x, Price: %02x, Yield: %02x\n",
+           vla.message.msg_type, vla.message.timestamp, vla.message.order_ref_number,
+           vla.message.trans_id, vla.message.order_book_id, vla.message.side,
+           vla.message.qty, vla.message.price, vla.message.yield);
     }
 }
 
