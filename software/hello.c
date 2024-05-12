@@ -113,8 +113,7 @@ void write_message(const vga_ball_color_t *c) {
 
     }
     else {
-        printf("Waiting for ready...\n");
-        // printf("Data written to device:\n");
+        
 
         srand(time(NULL));
 
@@ -131,7 +130,8 @@ void write_message(const vga_ball_color_t *c) {
         printf("Done!");
 
         printf("\n");
-
+        
+        printf("Waiting for ready...\n");
         // Sleep based on the message type
         if (msg_type == 0x44) {
             sleep(4);
