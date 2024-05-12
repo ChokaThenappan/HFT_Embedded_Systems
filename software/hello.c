@@ -87,10 +87,10 @@ void read_message() {
         perror("ioctl(VGA_BALL_READ_DATA) failed");
         return;
     }
-    printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x\n",
-           vla.message.msg_type, vla.message.timestamp, vla.message.order_ref_number,
-           vla.message.trans_id, vla.message.order_book_id, vla.message.side,
-           vla.message.qty, vla.message.price, vla.message.yield);
+    // printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x\n",
+    //        vla.message.msg_type, vla.message.timestamp, vla.message.order_ref_number,
+    //        vla.message.trans_id, vla.message.order_book_id, vla.message.side,
+    //        vla.message.qty, vla.message.price, vla.message.yield);
 }
 
 void write_message(const vga_ball_color_t *c) {
@@ -129,15 +129,15 @@ void *network_thread_f(void *arg) {
             perror("Error reading from socket");
             exit(1);
         } else if (n == 0) {
-            printf("Connection closed by client\n");
+            // printf("Connection closed by client\n");
             close(sockfd);
             break;
         }
-        printf("Received data:\n");
-        for (int i = 0; i < n; i++) {
-            printf("%02X ", (unsigned char)recvBuf[i]);
-        }
-        printf("\n");
+        // printf("Received data:\n");
+        // for (int i = 0; i < n; i++) {
+        //     printf("%02X ", (unsigned char)recvBuf[i]);
+        // }
+        // printf("\n");
     }
 
     return NULL;
