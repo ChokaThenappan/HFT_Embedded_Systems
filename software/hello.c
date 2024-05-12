@@ -34,6 +34,14 @@ void read_message() {
 void write_message(const vga_ball_color_t *c) {
 	vga_ball_arg_t vla;
 	vla.message = *c;
+
+    unsigned char buffer_status = ioread8(BUFFER_NOT_EMPTY(dev.virtbase));
+
+    if (buffer_status == 1) {
+        printf('Buffer is full, cannot write data \n');
+        return;
+    }
+
 	if (ioctl(vga_ball_fd, VGA_BALL_WRITE_DATA, &vla)) {
 		perror("ioctl(VGA_BALL_WRITE_DATA) failed");
 		return;
