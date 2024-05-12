@@ -142,6 +142,9 @@ void *network_thread_f(void *arg) {
         //     printf("%02X ", (unsigned char)recvBuf[i]);
         // }
         // printf("\n");
+        QueueData newData;
+        memcpy(newData.data, recvBuf, n);  // Copy received data into QueueData
+        enqueue(&dataQueue, newData);
     }
 
     return NULL;
@@ -189,16 +192,15 @@ int main() {
     }
 
     while (1) {
-        char data[BUFFER_SIZE] = "Data from FPGA";
-        QueueData newData;
-        strcpy(newData.data, data);
-        enqueue(&dataQueue, newData);
+        // char data[BUFFER_SIZE] = "Data from FPGA";
+        // QueueData dataItem = dequeue(&dataQueue);
+        // strcpy(newData.data, data);
+        // enqueue(&dataQueue, newData);
 
         QueueData dataItem = dequeue(&dataQueue);
         vga_ball_color_t vla;
         memcpy(&vla, dataItem.data, sizeof(vga_ball_color_t));
         write_message(&vla);
-        sleep(2);
     }
 
     close(sockfd);
